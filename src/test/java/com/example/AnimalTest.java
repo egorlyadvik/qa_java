@@ -26,6 +26,12 @@ public class AnimalTest {
         public void getFamilyReturnsGeneralInformationAboutFamilies() {
             assertEquals("Существует несколько семейств: заячьи, беличьи, мышиные, кошачьи, псовые, медвежьи, куньи", animal.getFamily());
         }
+
+        @Test
+        public void getFoodWithIncorrectFamilyThrowsException() {
+            Exception e = assertThrows(Exception.class, () -> animal.getFood(" "));
+            assertEquals("Неизвестный вид животного, используйте значение Травоядное или Хищник", e.getMessage());
+        }
     }
 
     @RunWith(Parameterized.class)
@@ -44,8 +50,7 @@ public class AnimalTest {
         public static Object[][] getAnimalData() {
             return new Object[][]{
                     {"Травоядное", List.of("Трава", "Различные растения")},
-                    {"Хищник", List.of("Животные", "Птицы", "Рыба")},
-                    {" ", List.of()}
+                    {"Хищник", List.of("Животные", "Птицы", "Рыба")}
             };
         }
 
@@ -55,12 +60,8 @@ public class AnimalTest {
         }
 
         @Test
-        public void getFoodReturnsCorrectResult() {
-            try {
-                assertEquals(expected, animal.getFood(animalKind));
-            } catch (Exception e) {
-                assertEquals("Неизвестный вид животного, используйте значение Травоядное или Хищник", e.getMessage());
-            }
+        public void getFoodReturnsCorrectKindOfFood() throws Exception {
+            assertEquals(expected, animal.getFood(animalKind));
         }
     }
 }
